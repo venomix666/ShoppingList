@@ -83,7 +83,7 @@ class ShoppingViewModel(app: Application) : AndroidViewModel(app) {
                 cdao.insert(CategoryEntity(name = "Bröd"))
                 cdao.insert(CategoryEntity(name = "Mejeri"))
                 cdao.insert(CategoryEntity(name = "Kylvaror"))
-                cdao.insert(CategoryEntity(name = "Konserver"))
+                cdao.insert(CategoryEntity(name = "Konserver/skafferi"))
                 cdao.insert(CategoryEntity(name = "Drickbart"))
                 cdao.insert(CategoryEntity(name = "Godis"))
                 cdao.insert(CategoryEntity(name = "Djupfryst"))
@@ -190,36 +190,6 @@ class ShoppingViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
     }
-
-    /*fun startItemSyncForList(list: ShoppingListEntity) {
-
-        val shareId = list.shareId
-        if (shareId.isBlank()) return
-
-        firestore.observeItems(shareId) { remoteItems ->
-
-            viewModelScope.launch(Dispatchers.IO) {
-                Log.d("SYNC", "Syncing items for listId=${list.id}, shareId=${list.shareId}")
-                Log.d("SYNC", "Received items=${remoteItems.size}")
-                sdao.replaceItemsForList(list.id, remoteItems)
-            }
-        }
-    }*/
-
-    /*fun startSync(list: ShoppingListEntity) {
-        if (list.shareId.isBlank()) return
-
-        firestore.observeItems(list.shareId) { remoteItems ->
-
-            viewModelScope.launch(Dispatchers.IO) {
-
-                // simple strategy: overwrite local
-                //sdao.replaceItemsForList(list.id, remoteItems)
-                sdao.clearList(list.id)
-                sdao.insertAll(remoteItems)
-            }
-        }
-    }*/
 
     fun delete(item: ShoppingItemEntity) {
         viewModelScope.launch(Dispatchers.IO) {

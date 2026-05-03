@@ -224,21 +224,21 @@ fun ShoppingApp(vm: ShoppingViewModel) {
 
         AlertDialog(
             onDismissRequest = { listToDelete = null },
-            title = { Text("Delete list") },
-            text = { Text("Delete '${list.name}'? This will remove all items.") },
+            title = { Text("Ta bort lista") },
+            text = { Text("Vill du ta bort '${list.name}'?") },
             confirmButton = {
                 TextButton(onClick = {
                     vm.deleteList(list)
                     listToDelete = null
                 }) {
-                    Text("Delete")
+                    Text("Ta bort")
                 }
             },
             dismissButton = {
                 TextButton(onClick = {
                     listToDelete = null
                 }) {
-                    Text("Cancel")
+                    Text("Avbryt")
                 }
             }
         )
