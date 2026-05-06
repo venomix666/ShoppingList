@@ -20,9 +20,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.core.view.WindowCompat
@@ -55,6 +57,8 @@ fun ShoppingApp(vm: ShoppingViewModel) {
     val selectedListId by vm.selectedListId.collectAsStateWithLifecycle()
     val categories by vm.categories.collectAsStateWithLifecycle()
     val selectedCategoryId by vm.selectedCategoryId.collectAsStateWithLifecycle()
+
+    var itemToChange by remember { mutableStateOf<ShoppingItemEntity?>(value = null) }
     //val selectedListId = vm.selectedListId.collectAsStateWithLifecycle().value
     //val suggestions by vm.suggestions.collectAsStateWithLifecycle()
 
@@ -132,8 +136,10 @@ fun ShoppingApp(vm: ShoppingViewModel) {
 
             Button(
                 onClick = {
-                            if(text != "") vm.addItem(text)
-                            text = ""
+                            if(text != "" && selectedCategoryId != null) {
+                                vm.addItem(text)
+                                text = ""
+                            }
                           },
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
@@ -188,19 +194,26 @@ fun ShoppingApp(vm: ShoppingViewModel) {
                         ) {
                             Checkbox(
                                 checked = item.picked,
-                                onCheckedChange = { vm.togglePicked(item) }
+                                onCheckedChange = { vm.togglePicked(item) },
                             )
 
                             Spacer(Modifier.width(4.dp))   // small gap
 
-                            Text(text = item.name,
-                                modifier = Modifier.weight(1.0f),
+                            Text(text = (if(item.quantity > 1) "${item.quantity} " else "") + item.name,
+                                modifier = Modifier.combinedClickable(
+                                    onClick = {},
+                                    onLongClick = {
+                                        itemToChange = item
+                                    }
+                                ).weight(1.0f),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 color = if(item.picked) Color.Gray else Color.Black,
                                 style = if(item.picked)
                                     TextStyle(textDecoration = TextDecoration.LineThrough)
-                                else TextStyle.Default
+                                else TextStyle.Default,
+
+
                             )
                             TextButton(onClick = { vm.delete(item) }) {
                                 Text("Ta bort")
@@ -237,6 +250,38 @@ fun ShoppingApp(vm: ShoppingViewModel) {
             dismissButton = {
                 TextButton(onClick = {
                     listToDelete = null
+                }) {
+                    Text("Avbryt")
+                }
+            }
+        )
+    }
+
+
+    itemToChange?.let { item->
+        var text by remember(item.id) { mutableStateOf(item.quantity.toString()) }
+        AlertDialog(
+            onDismissRequest = { itemToChange = null },
+            title = { Text("Ändra antal") },
+            text = { TextField(
+                value = text,
+                onValueChange = { text = it },
+                //modifier = Modifier.weight(1f),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                label = { Text("Nytt antal") },
+            ) },
+            confirmButton = {
+                TextButton(onClick = {
+                    val quantity = text.toIntOrNull()
+                    if(quantity != null) vm.updateQuantity(item, quantity)
+                    itemToChange = null
+                }) {
+                    Text("Ändra")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    itemToChange = null
                 }) {
                     Text("Avbryt")
                 }

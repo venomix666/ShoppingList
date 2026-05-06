@@ -68,7 +68,7 @@ val defaultSuggestions = listOf(
     ItemSuggestionEntity("Snacks", 10L),
 
     // Djupfryst
-    ItemSuggestionEntity("Oumpf", 11L),
+    ItemSuggestionEntity("Oumph", 11L),
     ItemSuggestionEntity("Quornbitar", 11L),
     ItemSuggestionEntity("Ärter", 11L),
 

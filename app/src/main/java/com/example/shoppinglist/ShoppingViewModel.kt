@@ -219,6 +219,19 @@ class ShoppingViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    fun updateQuantity(item: ShoppingItemEntity, quantity: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val listId = _selectedListId.value ?: return@launch
+            val list = sdao.getList(listId) ?: return@launch
+            val shareId = list.shareId
+            sdao.setQuantity(item.id, quantity)
+            val updatedItem = item.copy(quantity = quantity)
+            if(shareId.isNotBlank()) {
+                firestore.upsertItem(shareId, updatedItem)
+            }
+        }
+    }
+
     fun onQueryChanged(text: String) {
         query.value = text
     }

@@ -10,7 +10,7 @@ import androidx.room.RoomDatabase
         CategoryEntity::class,
         ItemSuggestionEntity::class
     ],
-    version = 21   // increment version
+    version = 22   // increment version
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun shoppingDao(): ShoppingDao

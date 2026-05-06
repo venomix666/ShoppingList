@@ -61,6 +61,9 @@ interface ShoppingDao {
     @Query("UPDATE shopping_items SET picked = :picked WHERE shareId = :shareId")
     suspend fun setPicked(shareId: String, picked: Boolean)
 
+    @Query("UPDATE shopping_items SET quantity = :quantity WHERE shareID = :shareId")
+    suspend fun setQuantity(shareId: String, quantity: Int)
+
     @Transaction
     suspend fun replaceItemsForList(shareId: String, items: List<ShoppingItemEntity>) {
         clearItems(shareId)

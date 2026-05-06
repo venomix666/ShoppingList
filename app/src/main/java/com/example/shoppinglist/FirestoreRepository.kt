@@ -70,7 +70,8 @@ class FirestoreRepository (
                         shareId = shareId,
                         name = it.getString("name") ?: "",
                         categoryId = it.getLong("categoryId"),
-                        picked = it.getBoolean("picked") ?: false
+                        picked = it.getBoolean("picked") ?: false,
+                        quantity = (it.getLong("quantity") ?: 0L).toInt()
                     )
                 } ?: emptyList()
 

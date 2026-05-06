@@ -15,5 +15,6 @@ data class ShoppingItemEntity(
     val shareId: String,
     val name: String,
     val categoryId: Long? = null,
-    val picked: Boolean = false
+    val picked: Boolean = false,
+    val quantity: Int = 1,
 )
